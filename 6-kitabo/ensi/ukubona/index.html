@@ -4,89 +4,148 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ukubona</title>
+
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
   <style>
-    body {
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
       margin: 0;
-      background: white;
-      font-family: 'Helvetica Neue', Helvetica, sans-serif;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+      background: #fff;
+      font-family: 'Inter', system-ui, sans-serif;
     }
-    .logo {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      max-width: 300px;
-      width: 80%;
+
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      opacity: 0;
+      animation: fadeIn 0.8s ease-in-out forwards;
     }
-    .grid-icon {
-      position: absolute;
-      top: 20px;
-      right: 20px;
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    .logo-center {
+      text-align: center;
+    }
+
+    .logo-center img:hover {
+      transform: rotate(10deg) scale(1.05);
+    }
+
+    .logo-center img {
+      max-width: 240px;
+      transition: transform 0.3s ease;
       cursor: pointer;
-      width: 28px;
-      height: 28px;
+    }
+
+    .top-links {
+      position: absolute;
+      top: 1.2rem;
+      right: 1rem;
+      display: flex;
+      align-items: center;
+    }
+
+    .menu-icon {
+      width: 32px;
+      height: 32px;
+      cursor: pointer;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 3px;
+      gap: 2px;
     }
-    .grid-icon div {
+
+    .menu-icon div {
+      background-color: #444;
       width: 8px;
       height: 8px;
-      background-color: #333;
-      border-radius: 2px;
+      border-radius: 1px;
     }
-    .overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(255,255,255,0.98);
-      overflow-y: scroll;
-      padding: 3rem;
+
+    .app-grid {
+      position: absolute;
+      top: 3.5rem;
+      right: 1rem;
       display: none;
-      z-index: 10;
-    }
-    .grid {
-      display: grid;
       grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
       gap: 1rem;
-      max-width: 1200px;
-      margin: auto;
-    }
-    .tile {
       background: #fff;
+      border: 1px solid #ddd;
       border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
       padding: 1rem;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+      z-index: 999;
+      max-height: 80vh;
+      overflow-y: auto;
+      width: 90vw;
+      max-width: 1200px;
+    }
+
+    .app-grid a {
       text-align: center;
-      transition: all 0.2s ease;
-    }
-    .tile:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    }
-    .tile a {
       text-decoration: none;
-      color: #111;
+      color: #333;
       font-size: 0.85rem;
-      word-break: break-word;
+      font-weight: 500;
       display: block;
+      padding: 0.4rem;
+      border-radius: 6px;
+    }
+
+    .app-grid a:hover {
+      background-color: #f0f0f0;
+      color: #007acc;
     }
   </style>
 </head>
+
 <body>
-  <img src="assets/images/ukubona.png" alt="Ukubona Logo" class="logo" />
-  <div class="grid-icon" onclick="toggleOverlay()">
-    <div></div><div></div><div></div>
-    <div></div><div></div><div></div>
-    <div></div><div></div><div></div>
+
+  <!-- Top-right: only grid icon -->
+  <div class="top-links">
+    <div class="menu-icon" id="gridToggle">
+      <div></div><div></div><div></div>
+      <div></div><div></div><div></div>
+      <div></div><div></div><div></div>
+    </div>
   </div>
-  <div class="overlay" id="overlay">
-    <div class="grid" id="repoGrid"></div>
+
+  <!-- App grid (populated dynamically from raw links) -->
+  <div class="app-grid" id="gridMenu"></div>
+
+  <!-- Centered logo -->
+  <div class="logo-center">
+    <a href="index.html">
+      <img src="assets/images/ukubona.png" alt="Ukubona Logo" />
+    </a>
   </div>
 
   <script>
+    const toggle = document.getElementById('gridToggle');
+    const menu = document.getElementById('gridMenu');
+
+    toggle.addEventListener('click', () => {
+      const isOpen = menu.style.display === 'grid';
+      menu.style.display = isOpen ? 'none' : 'grid';
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+        menu.style.display = 'none';
+      }
+    });
+
     const raw = `1. [nineth](https://abikesa.github.io/nineth/)
 2. [manson](https://abikesa.github.io/will/)
 3. [peterson](https://abikesa.github.io/jordanpeterson)
@@ -755,23 +814,25 @@
 666. [zarathustra](https://abikesa.github.io/zarathustra/)
 `;
 
-    const repoGrid = document.getElementById('repoGrid');
-    raw.split('\n').forEach(line => {
-      const matches = [...line.matchAll(/\[(.*?)\]\((.*?)\)/g)];
-      matches.forEach(match => {
+    const emojis = ['🌍','🎵','📚','🎨','🔬','💡','🧠','🧮','📊','🧬','⚖️','📈','📜','🏺','📷','📖','🛠️','🧰','🎼','🏥','🗺️','🧘','✊','🎬','📺','🛸','🧪','🕊️','🚀','🌱','🪐','🧭','🔭','🔐','🧳','🖼️','📼','⛵','🦠','⚙️','🖋️','💾','🔢','📁','🎙️','🧸','🔍','🎯','🦉','🧿','🔮','🥁','🎻','🏛️','🧱','🩺','🧹','🪄','📂','📇','📃','📜','💽','🎓'];
+
+    const grid = document.getElementById('gridMenu');
+    const links = raw.match(/\[(.*?)\]\((.*?)\)/g);
+
+    links.forEach((link, i) => {
+      const match = link.match(/\[(.*?)\]\((.*?)\)/);
+      if (match) {
         const name = match[1];
         const url = match[2];
-        const tile = document.createElement('div');
-        tile.className = 'tile';
-        tile.innerHTML = `<a href="${url}" target="_blank">${name}</a>`;
-        repoGrid.appendChild(tile);
-      });
+        const a = document.createElement('a');
+        a.href = url;
+        a.target = '_blank';
+        const emoji = emojis[i % emojis.length];
+        a.textContent = `${emoji} ${name}`;
+        grid.appendChild(a);
+      }
     });
-
-    function toggleOverlay() {
-      const overlay = document.getElementById('overlay');
-      overlay.style.display = overlay.style.display === 'block' ? 'none' : 'block';
-    }
   </script>
+
 </body>
 </html>
