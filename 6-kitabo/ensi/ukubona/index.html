@@ -7,6 +7,7 @@
 
   <link rel="icon" href="favicon.ico" type="image/x-icon">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 
   <style>
     * {
@@ -98,21 +99,36 @@
       color: #333;
       font-size: 0.85rem;
       font-weight: 500;
-      display: block;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       padding: 0.4rem;
       border-radius: 6px;
+      transition: background-color 0.2s;
     }
 
     .app-grid a:hover {
       background-color: #f0f0f0;
       color: #007acc;
     }
+
+    .app-grid lottie-player {
+      width: 40px;
+      height: 40px;
+    }
+
+    .icon-box {
+      font-size: 1.5rem;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
   </style>
 </head>
 
 <body>
-
-  <!-- Top-right: only grid icon -->
   <div class="top-links">
     <div class="menu-icon" id="gridToggle">
       <div></div><div></div><div></div>
@@ -121,10 +137,8 @@
     </div>
   </div>
 
-  <!-- App grid (populated dynamically from raw links) -->
   <div class="app-grid" id="gridMenu"></div>
 
-  <!-- Centered logo -->
   <div class="logo-center">
     <a href="index.html">
       <img src="assets/images/ukubona.png" alt="Ukubona Logo" />
@@ -814,6 +828,16 @@
 666. [zarathustra](https://abikesa.github.io/zarathustra/)
 `;
 
+    const animationPool = [
+      "https://assets1.lottiefiles.com/packages/lf20_x62chJ.json",
+      "https://assets9.lottiefiles.com/packages/lf20_kklehxsp.json",
+      "https://assets4.lottiefiles.com/packages/lf20_q5pk6p1k.json",
+      "https://assets2.lottiefiles.com/packages/lf20_u4yrau.json",
+      "https://assets5.lottiefiles.com/private_files/lf30_editor_ski34jwz.json",
+      "https://assets7.lottiefiles.com/packages/lf20_y6n67rkf.json",
+      "https://assets10.lottiefiles.com/packages/lf20_iwmd6pyr.json"
+    ];
+
     const emojis = ['🌍','🎵','📚','🎨','🔬','💡','🧠','🧮','📊','🧬','⚖️','📈','📜','🏺','📷','📖','🛠️','🧰','🎼','🏥','🗺️','🧘','✊','🎬','📺','🛸','🧪','🕊️','🚀','🌱','🪐','🧭','🔭','🔐','🧳','🖼️','📼','⛵','🦠','⚙️','🖋️','💾','🔢','📁','🎙️','🧸','🔍','🎯','🦉','🧿','🔮','🥁','🎻','🏛️','🧱','🩺','🧹','🪄','📂','📇','📃','📜','💽','🎓'];
 
     const grid = document.getElementById('gridMenu');
@@ -827,12 +851,17 @@
         const a = document.createElement('a');
         a.href = url;
         a.target = '_blank';
+
         const emoji = emojis[i % emojis.length];
-        a.textContent = `${emoji} ${name}`;
+        const icon = document.createElement('div');
+        icon.textContent = emoji;
+        icon.className = 'icon-box';
+        a.appendChild(icon);
+
+        a.appendChild(document.createTextNode(name));
         grid.appendChild(a);
       }
     });
   </script>
-
 </body>
 </html>
