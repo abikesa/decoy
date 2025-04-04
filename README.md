@@ -191,10 +191,6 @@ A more mythic, symbolic tone, woven into a paragraph about epistemic misdirectio
 ### 🪝 *The Simulacrum and the Hook*  
 *A poetic decoy wrapped in layered epistemology.*  
 
-[![](6-kitabo/ensi/figures/poem.png)](6-kitabo/ensi/figures/poem.png)
-
-
----
 
 ### *The Simulacrum and the Hook*  
 *for the one who hides fire in the raft*
