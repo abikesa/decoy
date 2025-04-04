@@ -104,12 +104,14 @@
       align-items: center;
       padding: 0.4rem;
       border-radius: 6px;
-      transition: background-color 0.2s;
+      transition: background-color 0.2s, transform 0.3s;
+      opacity: 0;
+      animation: fadeTile 0.5s ease forwards;
     }
 
-    .app-grid a:hover {
-      background-color: #f0f0f0;
-      color: #007acc;
+    @keyframes fadeTile {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .app-grid lottie-player {
@@ -838,6 +840,8 @@
       "https://assets10.lottiefiles.com/packages/lf20_iwmd6pyr.json"
     ];
 
+    const keywordsToAnimate = ['donor', 'case', 'trial', 'ai', 'flow', 'graph', 'anarchist'];
+
     const emojis = ['🌍','🎵','📚','🎨','🔬','💡','🧠','🧮','📊','🧬','⚖️','📈','📜','🏺','📷','📖','🛠️','🧰','🎼','🏥','🗺️','🧘','✊','🎬','📺','🛸','🧪','🕊️','🚀','🌱','🪐','🧭','🔭','🔐','🧳','🖼️','📼','⛵','🦠','⚙️','🖋️','💾','🔢','📁','🎙️','🧸','🔍','🎯','🦉','🧿','🔮','🥁','🎻','🏛️','🧱','🩺','🧹','🪄','📂','📇','📃','📜','💽','🎓'];
 
     const grid = document.getElementById('gridMenu');
@@ -851,10 +855,11 @@
         const a = document.createElement('a');
         a.href = url;
         a.target = '_blank';
+        a.style.animationDelay = `${i * 0.02}s`;
 
-        const useAnimation = Math.random() < 0.2; // 20% chance of animation
+        const shouldAnimate = keywordsToAnimate.some(keyword => name.toLowerCase().includes(keyword)) || Math.random() < 0.2;
 
-        if (useAnimation) {
+        if (shouldAnimate) {
           const anim = document.createElement('lottie-player');
           anim.setAttribute('src', animationPool[i % animationPool.length]);
           anim.setAttribute('autoplay', '');
