@@ -3,41 +3,68 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ukubona Grid</title>
+  <title>Ukubona</title>
   <style>
     body {
       margin: 0;
+      background: white;
       font-family: 'Helvetica Neue', Helvetica, sans-serif;
-      background: #f9f9f9;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 2rem;
     }
-    h1 {
-      font-size: 1.8rem;
-      margin-bottom: 1rem;
-      color: #333;
+    .logo {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      max-width: 300px;
+      width: 80%;
+    }
+    .grid-icon {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      cursor: pointer;
+      width: 28px;
+      height: 28px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3px;
+    }
+    .grid-icon div {
+      width: 8px;
+      height: 8px;
+      background-color: #333;
+      border-radius: 2px;
+    }
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(255,255,255,0.98);
+      overflow-y: scroll;
+      padding: 3rem;
+      display: none;
+      z-index: 10;
     }
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
       gap: 1rem;
-      width: 100%;
       max-width: 1200px;
+      margin: auto;
     }
     .tile {
-      background: white;
+      background: #fff;
       border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
       padding: 1rem;
       text-align: center;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-      overflow: hidden;
+      transition: all 0.2s ease;
     }
     .tile:hover {
       transform: translateY(-2px);
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     }
     .tile a {
       text-decoration: none;
@@ -49,12 +76,18 @@
   </style>
 </head>
 <body>
-  <h1>🌐 Ukubona Catalog Grid</h1>
-  <div class="grid" id="repoGrid"></div>
+  <img src="assets/images/ukubona.png" alt="Ukubona Logo" class="logo" />
+  <div class="grid-icon" onclick="toggleOverlay()">
+    <div></div><div></div><div></div>
+    <div></div><div></div><div></div>
+    <div></div><div></div><div></div>
+  </div>
+  <div class="overlay" id="overlay">
+    <div class="grid" id="repoGrid"></div>
+  </div>
 
   <script>
-    const raw = `
-1. [nineth](https://abikesa.github.io/nineth/)
+    const raw = `1. [nineth](https://abikesa.github.io/nineth/)
 2. [manson](https://abikesa.github.io/will/)
 3. [peterson](https://abikesa.github.io/jordanpeterson)
 4. [sch](https://abikesa.github.io/schubert/)[lem](https://abikesa.github.io/schlemiel/)[iel](https://abikesa.github.io/haydn)
@@ -722,23 +755,23 @@
 666. [zarathustra](https://abikesa.github.io/zarathustra/)
 `;
 
-    const grid = document.getElementById("repoGrid");
-    const lines = raw.trim().split("\n");
-
-    lines.forEach(line => {
-      const matches = [...line.matchAll(/\[([^\]]+)\]\(([^)]+)\)/g)];
-      matches.forEach(([_, text, url]) => {
-        const div = document.createElement("div");
-        div.className = "tile";
-        const a = document.createElement("a");
-        a.href = url;
-        a.target = "_blank";
-        a.rel = "noopener noreferrer";
-        a.textContent = text;
-        div.appendChild(a);
-        grid.appendChild(div);
+    const repoGrid = document.getElementById('repoGrid');
+    raw.split('\n').forEach(line => {
+      const matches = [...line.matchAll(/\[(.*?)\]\((.*?)\)/g)];
+      matches.forEach(match => {
+        const name = match[1];
+        const url = match[2];
+        const tile = document.createElement('div');
+        tile.className = 'tile';
+        tile.innerHTML = `<a href="${url}" target="_blank">${name}</a>`;
+        repoGrid.appendChild(tile);
       });
     });
+
+    function toggleOverlay() {
+      const overlay = document.getElementById('overlay');
+      overlay.style.display = overlay.style.display === 'block' ? 'none' : 'block';
+    }
   </script>
 </body>
 </html>
