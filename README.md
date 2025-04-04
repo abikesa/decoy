@@ -167,7 +167,13 @@ A more mythic, symbolic tone, woven into a paragraph about epistemic misdirectio
 ### 🪝 *The Simulacrum and the Hook*  
 *A poetic decoy wrapped in layered epistemology.*  
 
-[![](6-kitabo/ensi/figures/poem.png)](6-kitabo/ensi/figures/poem.png)
+<p align="center">
+  <a href="6-kitabo/ensi/figures/poem.png">
+    <img src="6-kitabo/ensi/figures/poem.png" width="300" />
+  </a><br>
+  <em>Click to expand the verse</em>
+</p>
+
 
 ---
 
