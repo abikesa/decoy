@@ -852,11 +852,22 @@
         a.href = url;
         a.target = '_blank';
 
-        const emoji = emojis[i % emojis.length];
-        const icon = document.createElement('div');
-        icon.textContent = emoji;
-        icon.className = 'icon-box';
-        a.appendChild(icon);
+        const useAnimation = Math.random() < 0.2; // 20% chance of animation
+
+        if (useAnimation) {
+          const anim = document.createElement('lottie-player');
+          anim.setAttribute('src', animationPool[i % animationPool.length]);
+          anim.setAttribute('autoplay', '');
+          anim.setAttribute('loop', '');
+          anim.setAttribute('mode', 'normal');
+          a.appendChild(anim);
+        } else {
+          const emoji = emojis[i % emojis.length];
+          const icon = document.createElement('div');
+          icon.textContent = emoji;
+          icon.className = 'icon-box';
+          a.appendChild(icon);
+        }
 
         a.appendChild(document.createTextNode(name));
         grid.appendChild(a);
